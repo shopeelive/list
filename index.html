@@ -7,8 +7,11 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
-        <h1>Link List</h1>
+    
+    <div class="container" id="listlink">
+        <center><h1>Link List</h1></center>
+        <center><button onclick="showlist()" class="delete-button">CLOSE</button></center>
+        <br>
 
         <!-- Form for Adding Quotes -->
         <form id="quoteForm">
@@ -18,6 +21,19 @@
 
         <!-- Display Quotes -->
         <ul id="quoteList"></ul>
+    </div>
+
+    <div class="container">
+        <h1>File Upload and Display</h1>
+
+        <!-- File Upload Form -->
+        <form id="fileUploadForm">
+            <input type="file" id="fileInput">
+            <button type="submit">Upload File</button>
+        </form>
+
+        <!-- Display Uploaded Files -->
+        <ul id="fileList"></ul>
     </div>
 
 

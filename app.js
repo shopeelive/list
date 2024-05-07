@@ -16,18 +16,76 @@ const database = firebase.database();
 const quoteForm = document.getElementById('quoteForm');
 const quoteInput = document.getElementById('quoteInput');
 const quoteList = document.getElementById('quoteList');
+const storage = firebase.storage();
+const fileList = document.getElementById('fileList');
+const fileUploadForm = document.getElementById('fileUploadForm');
+const fileInput = document.getElementById('fileInput');
+const listLink = document.getElementById('listlink');
+
+// Function to render uploaded files
+function renderFiles() {
+    fileList.innerHTML = ''; // Clear existing list
+
+    // Retrieve list of files from Firebase Storage
+    storage.ref('files').listAll()
+        .then((res) => {
+            res.items.forEach((itemRef) => {
+                // Get download URL for each file
+                itemRef.getDownloadURL().then((url) => {
+                    // Create list item with download link
+                    const li = document.createElement('li');
+                    li.innerHTML = `
+                        <a href="${url}" target="_blank">${itemRef.name}</a>
+                    `;
+                    fileList.appendChild(li);
+                });
+            });
+        })
+        .catch((error) => {
+            console.error('Error retrieving files: ', error);
+        });
+}
+
+// Event listener for file upload form submission
+fileUploadForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    const file = fileInput.files[0];
+
+    if (file) {
+        const storageRef = storage.ref('files/' + file.name);
+
+        // Upload file to Firebase Storage
+        storageRef.put(file)
+            .then(() => {
+                console.log('File uploaded successfully!');
+                renderFiles(); // Update file list after upload
+            })
+            .catch((error) => {
+                console.error('Error uploading file: ', error);
+            });
+    }
+});
+
+// Initial render of uploaded files
+renderFiles();
 
 // Function to render quotes
 function renderQuotes() {
     quoteList.innerHTML = ''; // Clear existing list
 
-    database.ref('slader').once('value', (snapshot) => {
+    database.ref('slader').limitToLast(5).on('value', (snapshot) => {
+        let letter = "";
         snapshot.forEach((childSnapshot) => {
             const quoteId = childSnapshot.key;
             const quoteData = childSnapshot.val();
 
+            
+
             if (quoteData && quoteData.quote) {
                 const quote = quoteData.quote;
+                letter = quote + "\n" + letter;
+                console.log(letter);
 
                 // Create list item for each quote
                 const li = document.createElement('li');
@@ -111,3 +169,8 @@ function deleteQuote(quoteId) {
 
 // Initial render
 renderQuotes();
+
+function showlist() {
+    listLink.style.display = 'none';
+}
+
