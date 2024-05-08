@@ -36,6 +36,7 @@ function renderFiles() {
                     const li = document.createElement('li');
                     li.innerHTML = `
                         <a href="${url}" target="_blank">${itemRef.name}</a>
+                        <br><br>
                     `;
                     fileList.appendChild(li);
                 });
