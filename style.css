@@ -79,3 +79,57 @@ ul {
     gap: 10px;
 }
 
+
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.upload-form {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.file-input {
+    margin-right: 10px;
+    width: 100%;
+}
+
+.upload-button {
+    background-color: #1da1f2;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.file-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    grid-gap: 20px;
+}
+
+.file-card {
+    background-color: #f7f7f7;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+.file-name {
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.file-details {
+    color: #666;
+}
+
+.file-download {
+    color: #1da1f2;
+    text-decoration: none;
+    font-weight: bold;
+}

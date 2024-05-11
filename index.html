@@ -2,40 +2,43 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=0.9">
     <title>Link List</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     
     <div class="container" id="listlink">
-        <center><h1>Link List</h1></center>
-        <center><button onclick="showlist()" class="delete-button">CLOSE</button></center>
-        <br>
-
+        <h1>Link List</h1>
+        <button onclick="showlist()" class="delete-button">CLOSE</button>
+        <p>
         <!-- Form for Adding Quotes -->
-        <form id="quoteForm">
-            <input type="text" id="quoteInput" placeholder="Insert Link or Any Text...">
-            <button type="submit">Post</button>
-        </form>
+
+        <div style="display: flex; justify-content: space-between; align-items: center;margin: 10px;">
+            <input type="text" id="quoteInput" placeholder="Insert Link or Any Text..." style="width: 100%; margin-right: 10px;">
+            <button id="quoteForm">Post</button>
+        </div>
+        
+        
 
         <!-- Display Quotes -->
-        <ul id="quoteList"></ul>
+        <ul id="quoteList"  style="width: 100%"></ul>
     </div>
 
     <div class="container">
         <h1>File Upload and Display</h1>
-
+    
         <!-- File Upload Form -->
-        <form id="fileUploadForm">
-            <input type="file" id="fileInput">
-            <button type="submit">Upload File</button>
-        </form>
-
+        <div class="upload-form">
+            <input type="file" id="fileInput" class="file-input">
+            <button id="fileUploadForm" class="upload-button">Upload</button>
+        </div>
+    
         <!-- Display Uploaded Files -->
-        <ul id="fileList"></ul>
+        <div id="fileList" class="file-list"></div>
     </div>
-
+    
+    
 
     <script src="https://www.gstatic.com/firebasejs/8.3.3/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.3.3/firebase-database.js"></script>
