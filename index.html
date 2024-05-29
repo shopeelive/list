@@ -19,8 +19,6 @@
             <button id="quoteForm">Post</button>
         </div>
         
-        
-
         <!-- Display Quotes -->
         <ul id="quoteList"  style="width: 100%"></ul>
     </div>
@@ -30,16 +28,17 @@
     
         <!-- File Upload Form -->
         <div class="upload-form">
-            <input type="file" id="fileInput" class="file-input">
+            <input type="file" id="fileInput" class="file-input" multiple>
             <button id="fileUploadForm" class="upload-button">Upload</button>
+            <div id="progressContainer">
+                <progress id="fileProgress" value="0" max="100"></progress>
+            </div>
         </div>
     
         <!-- Display Uploaded Files -->
         <div id="fileList" class="file-list"></div>
     </div>
     
-    
-
     <script src="https://www.gstatic.com/firebasejs/8.3.3/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.3.3/firebase-database.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
@@ -47,11 +46,3 @@
 
 </body>
 </html>
-
-
-
-
-
-
-
-
