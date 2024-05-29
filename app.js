@@ -21,12 +21,11 @@ const fileList = document.getElementById('fileList');
 const fileUploadForm = document.getElementById('fileUploadForm');
 const fileInput = document.getElementById('fileInput');
 const listLink = document.getElementById('listlink');
-const fileProgress = document.getElementById('fileProgress');
+const uploadProgress = document.getElementById('uploadProgress');
 const progressContainer = document.getElementById('progressContainer');
 
 // Function to render uploaded files
 function renderFiles() {
-    const fileList = document.getElementById('fileList');
     fileList.innerHTML = '';
 
     storage.ref('files/files').listAll()
@@ -97,22 +96,20 @@ fileUploadForm.addEventListener('click', (e) => {
 
     const files = fileInput.files;
     if (files.length > 0) {
-        progressContainer.style.display = 'block';
-        Array.from(files).forEach(file => {
+        Array.from(files).forEach((file, index) => {
             const storageRef = storage.ref('files/files/' + file.name);
             const uploadTask = storageRef.put(file);
 
             uploadTask.on('state_changed', (snapshot) => {
                 const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                fileProgress.value = progress;
-                console.log('Upload is ' + progress + '% done');
+                uploadProgress.textContent = `Uploading ${file.name}: ${progress.toFixed(2)}%`;
+                console.log(`Upload is ${progress}% done for file ${index + 1}`);
             }, (error) => {
                 console.error('Error uploading file: ', error);
             }, () => {
                 console.log('File uploaded successfully!');
                 renderFiles(); // Update file list after upload
-                fileProgress.value = 0;
-                progressContainer.style.display = 'none';
+                uploadProgress.textContent = '';
             });
         });
     }
@@ -215,7 +212,6 @@ renderQuotes();
 function showlist() {
     listLink.style.display = 'none';
 }
-
 
 
 function getTimeString(time) {
