@@ -115,8 +115,7 @@ fileUploadForm.addEventListener('click', (e) => {
     }
 });
 
-// Initial render of uploaded files
-renderFiles();
+
 
 // Function to render quotes
 function renderQuotes() {
