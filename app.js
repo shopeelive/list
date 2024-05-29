@@ -30,7 +30,7 @@ function renderFiles() {
     fileList.innerHTML = '';
 
     // Retrieve list of files
-    storage.ref('files').listAll()
+    storage.ref('files/files').listAll()
         .then((res) => {
             const promises = res.items.map((itemRef) => {
                 return Promise.all([itemRef.getDownloadURL(), itemRef.getMetadata()])
@@ -94,10 +94,6 @@ function renderFiles() {
 // Call renderFiles function to display uploaded files
 renderFiles();
 
-
-
-
-
 // Event listener for file upload form submission
 fileUploadForm.addEventListener('click', (e) => {
     e.preventDefault();
@@ -105,7 +101,7 @@ fileUploadForm.addEventListener('click', (e) => {
     const file = fileInput.files[0];
 
     if (file) {
-        const storageRef = storage.ref('files/' + file.name);
+        const storageRef = storage.ref('files/files/' + file.name);
 
         // Upload file to Firebase Storage
         storageRef.put(file)
@@ -131,8 +127,6 @@ function renderQuotes() {
         snapshot.forEach((childSnapshot) => {
             const quoteId = childSnapshot.key;
             const quoteData = childSnapshot.val();
-
-
 
             if (quoteData && quoteData.quote) {
                 const quote = quoteData.quote;
@@ -183,8 +177,6 @@ quoteForm.addEventListener('click', (e) => {
             });
     }
 });
-
-
 
 // Function to make URLs clickable
 function makeClickable(text) {
