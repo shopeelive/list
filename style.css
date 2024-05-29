@@ -133,3 +133,43 @@ ul {
     text-decoration: none;
     font-weight: bold;
 }
+
+body {
+    font-family: Arial, sans-serif;
+}
+
+.tabs {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+}
+
+.tab-button {
+    background-color: #f1f1f1;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 16px;
+    margin: 0 5px;
+}
+
+.tab-button:hover {
+    background-color: #ddd;
+}
+
+.tab-button:focus {
+    outline: none;
+}
+
+.tab-content {
+    display: none;
+}
+
+.container {
+    max-width: 800px;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
