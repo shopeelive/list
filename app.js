@@ -55,7 +55,7 @@ function renderFiles() {
 
                         const fileName = document.createElement('div');
                         fileName.classList.add('file-name');
-                        fileName.textContent = file.name.length > 25 ? file.name.substring(0, 25) + '...' : file.name;
+                        fileName.textContent = file.name.length > 50 ? file.name.substring(0, 50) + '...' : file.name;
                         fileCard.appendChild(fileName);
 
                         const fileSize = document.createElement('div');
