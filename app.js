@@ -12,24 +12,23 @@ const firebaseConfig = {
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 const database = firebase.database();
+const storage = firebase.storage();
 
 const quoteForm = document.getElementById('quoteForm');
 const quoteInput = document.getElementById('quoteInput');
 const quoteList = document.getElementById('quoteList');
-const storage = firebase.storage();
 const fileList = document.getElementById('fileList');
 const fileUploadForm = document.getElementById('fileUploadForm');
 const fileInput = document.getElementById('fileInput');
 const listLink = document.getElementById('listlink');
+const fileProgress = document.getElementById('fileProgress');
+const progressContainer = document.getElementById('progressContainer');
 
 // Function to render uploaded files
 function renderFiles() {
     const fileList = document.getElementById('fileList');
-
-    // Clear existing content
     fileList.innerHTML = '';
 
-    // Retrieve list of files
     storage.ref('files/files').listAll()
         .then((res) => {
             const promises = res.items.map((itemRef) => {
@@ -49,10 +48,8 @@ function renderFiles() {
 
             Promise.all(promises)
                 .then((files) => {
-                    // Sort files by timestamp
                     files.sort((a, b) => b.timeCreated - a.timeCreated);
 
-                    // Render files
                     files.forEach((file) => {
                         const fileCard = document.createElement('div');
                         fileCard.classList.add('file-card');
@@ -98,20 +95,26 @@ renderFiles();
 fileUploadForm.addEventListener('click', (e) => {
     e.preventDefault();
 
-    const file = fileInput.files[0];
+    const files = fileInput.files;
+    if (files.length > 0) {
+        progressContainer.style.display = 'block';
+        Array.from(files).forEach(file => {
+            const storageRef = storage.ref('files/files/' + file.name);
+            const uploadTask = storageRef.put(file);
 
-    if (file) {
-        const storageRef = storage.ref('files/files/' + file.name);
-
-        // Upload file to Firebase Storage
-        storageRef.put(file)
-            .then(() => {
+            uploadTask.on('state_changed', (snapshot) => {
+                const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                fileProgress.value = progress;
+                console.log('Upload is ' + progress + '% done');
+            }, (error) => {
+                console.error('Error uploading file: ', error);
+            }, () => {
                 console.log('File uploaded successfully!');
                 renderFiles(); // Update file list after upload
-            })
-            .catch((error) => {
-                console.error('Error uploading file: ', error);
+                fileProgress.value = 0;
+                progressContainer.style.display = 'none';
             });
+        });
     }
 });
 
@@ -133,7 +136,6 @@ function renderQuotes() {
                 letter = quote + "\n" + letter;
                 console.log(letter);
 
-                // Create list item for each quote
                 const li = document.createElement('li');
                 li.className = 'quote-item'; // Add CSS class for styling
                 li.innerHTML = `
@@ -156,17 +158,13 @@ quoteForm.addEventListener('click', (e) => {
     const name = 'Anonymous'; // Set the name here or fetch from user input
 
     if (quoteText !== '') {
-        // Generate a new reference and get the key
         const newQuoteRef = database.ref('slader').push();
-
-        // Build the quote object with name, quote text, and timestamp
         const quoteObject = {
             name: name,
             quote: quoteText,
             timestamp: firebase.database.ServerValue.TIMESTAMP
         };
 
-        // Set the quote object to the new reference key
         newQuoteRef.set(quoteObject)
             .then(() => {
                 quoteInput.value = ''; // Clear input
@@ -184,7 +182,6 @@ function makeClickable(text) {
         return text; // Return unchanged if not a string
     }
 
-    // Use regular expression to replace URLs with clickable links
     return text.replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank">$1</a>');
 }
 
@@ -218,6 +215,8 @@ renderQuotes();
 function showlist() {
     listLink.style.display = 'none';
 }
+
+
 
 function getTimeString(time) {
     const timestamp = new Date(parseInt(time));
