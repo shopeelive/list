@@ -7,21 +7,6 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    
-    <div class="container" id="listlink">
-        <h1>Link List</h1>
-        <button onclick="showlist()" class="delete-button">CLOSE</button>
-        <p>
-        <!-- Form for Adding Quotes -->
-
-        <div style="display: flex; justify-content: space-between; align-items: center;margin: 10px;">
-            <input type="text" id="quoteInput" placeholder="Insert Link or Any Text..." style="width: 100%; margin-right: 10px;">
-            <button id="quoteForm">Post</button>
-        </div>
-        
-        <!-- Display Quotes -->
-        <ul id="quoteList" style="width: 100%"></ul>
-    </div>
 
     <div class="container">
         <h1>File Upload and Display</h1>
@@ -38,6 +23,23 @@
         <!-- Display Uploaded Files -->
         <div id="fileList" class="file-list"></div>
     </div>
+    
+    <div class="container" id="listlink">
+        <h1>Link List</h1>
+        <button onclick="showlist()" class="delete-button">CLOSE</button>
+        <p>
+        <!-- Form for Adding Quotes -->
+
+        <div style="display: flex; justify-content: space-between; align-items: center;margin: 10px;">
+            <input type="text" id="quoteInput" placeholder="Insert Link or Any Text..." style="width: 100%; margin-right: 10px;">
+            <button id="quoteForm">Post</button>
+        </div>
+        
+        <!-- Display Quotes -->
+        <ul id="quoteList" style="width: 100%"></ul>
+    </div>
+
+
     
     <script src="https://www.gstatic.com/firebasejs/8.3.3/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.3.3/firebase-database.js"></script>
