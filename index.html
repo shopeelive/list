@@ -7,44 +7,64 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-    <div class="container">
-        <h1>File Upload and Display</h1>
-    
-        <!-- File Upload Form -->
-        <div class="upload-form">
-            <input type="file" id="fileInput" class="file-input" multiple>
-            <button id="fileUploadForm" class="upload-button">Upload</button>
-            <div id="progressContainer">
-                <div id="uploadProgress" style="margin-top: 10px;"></div>
-            </div>
-        </div>
-    
-        <!-- Display Uploaded Files -->
-        <div id="fileList" class="file-list"></div>
+    <div class="tabs">
+        <button class="tab-button" onclick="openTab('upload')">File Upload</button>
+        <button class="tab-button" onclick="openTab('links')">Link List</button>
     </div>
-    
-    <div class="container" id="listlink">
-        <h1>Link List</h1>
-        <button onclick="showlist()" class="delete-button">CLOSE</button>
-        <p>
-        <!-- Form for Adding Quotes -->
 
-        <div style="display: flex; justify-content: space-between; align-items: center;margin: 10px;">
-            <input type="text" id="quoteInput" placeholder="Insert Link or Any Text..." style="width: 100%; margin-right: 10px;">
-            <button id="quoteForm">Post</button>
-        </div>
+    <div id="upload" class="tab-content">
+        <div class="container">
+            <h1>File Upload and Display</h1>
         
-        <!-- Display Quotes -->
-        <ul id="quoteList" style="width: 100%"></ul>
+            <!-- File Upload Form -->
+            <div class="upload-form">
+                <input type="file" id="fileInput" class="file-input" multiple>
+                <button id="fileUploadForm" class="upload-button">Upload</button>
+                <div id="progressContainer">
+                    <div id="uploadProgress" style="margin-top: 10px;"></div>
+                </div>
+            </div>
+        
+            <!-- Display Uploaded Files -->
+            <div id="fileList" class="file-list"></div>
+        </div>
+    </div>
+    
+    <div id="links" class="tab-content" style="display:none;">
+        <div class="container" id="listlink">
+            <h1>Link List</h1>
+            <button onclick="showlist()" class="delete-button">CLOSE</button>
+            <p>
+            <!-- Form for Adding Quotes -->
+            <div style="display: flex; justify-content: space-between; align-items: center;margin: 10px;">
+                <input type="text" id="quoteInput" placeholder="Insert Link or Any Text..." style="width: 100%; margin-right: 10px;">
+                <button id="quoteForm">Post</button>
+            </div>
+            
+            <!-- Display Quotes -->
+            <ul id="quoteList" style="width: 100%"></ul>
+        </div>
     </div>
 
-
-    
     <script src="https://www.gstatic.com/firebasejs/8.3.3/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.3.3/firebase-database.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
     <script src="app.js"></script>
 
+    <script>
+        function openTab(tabName) {
+            var i;
+            var tabcontent = document.getElementsByClassName("tab-content");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+            document.getElementById(tabName).style.display = "block";
+        }
+
+        // Open the default tab
+        document.addEventListener("DOMContentLoaded", function() {
+            openTab('upload');
+        });
+    </script>
 </body>
 </html>
