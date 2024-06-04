@@ -121,31 +121,38 @@ fileUploadForm.addEventListener('click', (e) => {
 function renderQuotes() {
     quoteList.innerHTML = ''; // Clear existing list
 
-    database.ref('slader').limitToLast(8).on('value', (snapshot) => {
-        let letter = "";
+    database.ref('slader').limitToLast(25).on('value', (snapshot) => {
+        let quotes = []; // Collect all quotes first
+
         snapshot.forEach((childSnapshot) => {
             const quoteId = childSnapshot.key;
             const quoteData = childSnapshot.val();
 
             if (quoteData && quoteData.quote) {
-                const quote = quoteData.quote;
-                letter = quote + "\n" + letter;
-                console.log(letter);
-
-                const li = document.createElement('li');
-                li.className = 'quote-item'; // Add CSS class for styling
-                li.innerHTML = `
-                    <span class="quote-text">${makeClickable(quote)}</span>
-                    <div class="quote-buttons">
-                        <button onclick="copyQuote('${quote}')" class="copy-button">Copy</button>
-                        <button onclick="deleteQuote('${quoteId}')" class="delete-button">Delete</button>
-                    </div>
-                `;
-                quoteList.appendChild(li);
+                quotes.push({ quoteId: quoteId, quote: quoteData.quote });
             }
+        });
+
+        quotes.reverse(); // Reverse the order of the quotes
+
+        quotes.forEach((quoteData) => {
+            const quote = quoteData.quote;
+            const quoteId = quoteData.quoteId;
+
+            const li = document.createElement('li');
+            li.className = 'quote-item'; // Add CSS class for styling
+            li.innerHTML = `
+                <span class="quote-text">${makeClickable(quote)}</span>
+                <div class="quote-buttons">
+                    <button onclick="copyQuote('${quote}')" class="copy-button">Copy</button>
+                    <button onclick="deleteQuote('${quoteId}')" class="delete-button">Delete</button>
+                </div>
+            `;
+            quoteList.appendChild(li);
         });
     });
 }
+
 
 // Add Quote
 quoteForm.addEventListener('click', (e) => {
