@@ -121,7 +121,7 @@ fileUploadForm.addEventListener('click', (e) => {
 function renderQuotes() {
     quoteList.innerHTML = ''; // Clear existing list
 
-    database.ref('slader').limitToLast(25).on('value', (snapshot) => {
+    database.ref('slader').limitToLast(50).on('value', (snapshot) => {
         let quotes = []; // Collect all quotes first
 
         snapshot.forEach((childSnapshot) => {
