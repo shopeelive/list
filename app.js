@@ -216,7 +216,7 @@ function deleteQuote(quoteId) {
 renderQuotes();
 
 function showlist() {
-    listLink.style.display = 'none';
+    fileList.style.display = 'none';
 }
 
 
