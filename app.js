@@ -28,7 +28,7 @@ const progressContainer = document.getElementById('progressContainer');
 function renderFiles() {
     fileList.innerHTML = '';
 
-    storage.ref('files/files').listAll()
+    storage.ref('files/2025').listAll()
         .then((res) => {
             const promises = res.items.map((itemRef) => {
                 return Promise.all([itemRef.getDownloadURL(), itemRef.getMetadata()])
@@ -55,7 +55,7 @@ function renderFiles() {
 
                         const fileName = document.createElement('div');
                         fileName.classList.add('file-name');
-                        fileName.textContent = file.name.length > 50 ? file.name.substring(0, 50) + '...' : file.name;
+                        fileName.textContent = file.name.length > 50 ? file.name.substring(0, 10) + '...' : file.name;
                         fileCard.appendChild(fileName);
 
                         const fileSize = document.createElement('div');
@@ -97,7 +97,7 @@ fileUploadForm.addEventListener('click', (e) => {
     const files = fileInput.files;
     if (files.length > 0) {
         Array.from(files).forEach((file, index) => {
-            const storageRef = storage.ref('files/files/' + file.name);
+            const storageRef = storage.ref('files/2025/' + file.name);
             const uploadTask = storageRef.put(file);
 
             uploadTask.on('state_changed', (snapshot) => {
@@ -119,9 +119,10 @@ fileUploadForm.addEventListener('click', (e) => {
 
 // Function to render quotes
 function renderQuotes() {
-    quoteList.innerHTML = ''; // Clear existing list
+
 
     database.ref('slader').limitToLast(50).on('value', (snapshot) => {
+        quoteList.innerHTML = ''; // Clear existing list
         let quotes = []; // Collect all quotes first
 
         snapshot.forEach((childSnapshot) => {
@@ -129,11 +130,10 @@ function renderQuotes() {
             const quoteData = childSnapshot.val();
 
             if (quoteData && quoteData.quote) {
-                quotes.push({ quoteId: quoteId, quote: quoteData.quote });
+                quotes.unshift({ quoteId: quoteId, quote: quoteData.quote });
             }
         });
 
-        quotes.reverse(); // Reverse the order of the quotes
 
         quotes.forEach((quoteData) => {
             const quote = quoteData.quote;
@@ -143,9 +143,9 @@ function renderQuotes() {
             li.className = 'quote-item'; // Add CSS class for styling
             li.innerHTML = `
                 <span class="quote-text">${makeClickable(quote)}</span>
-                <div class="quote-buttons">
-                    <button onclick="copyQuote('${quote}')" class="copy-button">Copy</button>
-                    <button onclick="deleteQuote('${quoteId}')" class="delete-button">Delete</button>
+                <div class="quote-buttons" align="left">
+                    <span onclick="copyQuote('${quote}')" class="copy-button">🗐 Copy</span>
+                    <span onclick="deleteQuote('${quoteId}')" class="delete-button">🗑 Delete</span>
                 </div>
             `;
             quoteList.appendChild(li);
@@ -171,7 +171,7 @@ quoteForm.addEventListener('click', (e) => {
         newQuoteRef.set(quoteObject)
             .then(() => {
                 quoteInput.value = ''; // Clear input
-                renderQuotes();
+
             })
             .catch((error) => {
                 console.error('Error adding quote: ', error);
@@ -180,12 +180,11 @@ quoteForm.addEventListener('click', (e) => {
 });
 
 // Function to make URLs clickable
-function makeClickable(text) {
-    if (typeof text !== 'string') {
-        return text; // Return unchanged if not a string
-    }
-
-    return text.replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank">$1</a>');
+function makeClickable(input) {
+    const pattern = /^(https?:\/\/[^\s]+)$/; // matches if entire input is a hyperlink
+    return pattern.test(input)
+        ? `<a href="${input}" target="_blank">${input.length > 70 ? input.slice(0, 30) + '...' + input.slice(-30) : input}</a>` // link case
+        : `<pre>${input}</pre>`; // non-link case
 }
 
 // Function to copy quote to clipboard
@@ -204,7 +203,6 @@ function deleteQuote(quoteId) {
     if (confirm('Are you sure you want to delete this quote?')) {
         database.ref('slader').child(quoteId).remove()
             .then(() => {
-                renderQuotes();
             })
             .catch((error) => {
                 console.error('Error deleting quote: ', error);
