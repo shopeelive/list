@@ -1,23 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=0.9">
     <title>Link List</title>
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
-<center>
-    <div class="tabs">
-        <button class="tab-button" onclick="openTab('upload')">File Upload</button>
-        <button class="tab-button" onclick="openTab('links')">Link List</button>
-    </div>
-</center>
 
-    <div id="upload" class="tab-content"  style="display:none;">
+<body>
+    <div align='center'>
+        <div class="tabs">
+            <button class="tab-button" onclick="openTab('upload')">Links</button>
+            <button class="tab-button" onclick="openTab('links')">Files</button>
+        </div>
+    </div>
+
+    <div id="upload" class="tab-content" style="display:none;">
         <div class="container">
-            <h1>Upload Files</h1>
-        
+
             <!-- File Upload Form -->
             <div class="upload-form">
                 <input type="file" id="fileInput" class="file-input" multiple>
@@ -26,22 +27,36 @@
                     <div id="uploadProgress" style="margin-top: 10px;"></div>
                 </div>
             </div>
-        
+
             <!-- Display Uploaded Files -->
             <div id="fileList" class="file-list"></div>
         </div>
     </div>
-    
+
     <div id="links" class="tab-content">
         <div class="container" id="listlink">
-            <h1>Add Links</h1>
             <p>
-            <!-- Form for Adding Quotes -->
-            <div style="display: flex; justify-content: space-between; align-items: center;margin: 10px;">
-                <input type="text" id="quoteInput" placeholder="Insert Link or Any Text..." style="width: 100%; margin-right: 10px;">
+                <!-- Form for Adding Quotes -->
+                <center>
+                    <a href="https://shopee.ph/shopee-stream">DASH IMIXX </a> | <a
+                        href="https://shopee.ph/andrei14388">LOUIE </a> | <a href="https://shopee.ph/7rxlmqtjq9">7RXLMQ
+                    </a>
+                    | <a href="https://shopee.ph/95wb7o1a5_">JO-ANN </a>
+                    <br>
+                    <br>
+                    <a href="https://shopee.ph/ao8j8ff8rx">AO8J8FF8
+                    </a> | <a href="https://shopee.ph/52tzu_posm">ANDREI </a> | <a
+                        href="https://shopee.ph/krisann14388">JEMCASTLE </a> | <a href="https://shopee.ph/pub3fbdw43">
+                        PROFILE</a>
+                </center>
+                <br>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin: 10px;">
+                <textarea id="quoteInput" placeholder="Insert Link or Any Text..."
+                    style="width: 100%; margin-right: 10px;"></textarea>
                 <button id="quoteForm">Post</button>
             </div>
-            
+
+
             <!-- Display Quotes -->
             <ul id="quoteList" style="width: 100%"></ul>
         </div>
@@ -57,15 +72,16 @@
             var i;
             var tabcontent = document.getElementsByClassName("tab-content");
             for (i = 0; i < tabcontent.length; i++) {
-                tabcontent[i].style.display = "none";
+                tabcontent[i].style.display = "block";
             }
-            document.getElementById(tabName).style.display = "block";
+            document.getElementById(tabName).style.display = "none";
         }
 
         // Open the default tab
-        document.addEventListener("DOMContentLoaded", function() {
+        document.addEventListener("DOMContentLoaded", function () {
             openTab('upload');
         });
     </script>
 </body>
+
 </html>
