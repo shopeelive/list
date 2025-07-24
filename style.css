@@ -69,9 +69,12 @@ ul {
 }
 
 .quote-text {
-    flex: 1; /* Expand to fill remaining space */
-    max-width: calc(100% - 160px); /* Adjust as needed */
-    overflow-wrap: break-word; /* Wrap long words */
+    flex: 1;
+    /* Expand to fill remaining space */
+    max-width: calc(100% - 160px);
+    /* Adjust as needed */
+    overflow-wrap: break-word;
+    /* Wrap long words */
 }
 
 .quote-buttons {

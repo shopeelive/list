@@ -15,6 +15,7 @@ const database = firebase.database();
 const storage = firebase.storage();
 
 const quoteForm = document.getElementById('quoteForm');
+const quoteForm2 = document.getElementById('quoteForm2');
 const quoteInput = document.getElementById('quoteInput');
 const quoteList = document.getElementById('quoteList');
 const fileList = document.getElementById('fileList');
@@ -130,7 +131,7 @@ function renderQuotes() {
             const quoteData = childSnapshot.val();
 
             if (quoteData && quoteData.quote) {
-                quotes.unshift({ quoteId: quoteId, quote: quoteData.quote });
+                quotes.unshift({ quoteId: quoteId, quote: quoteData.quote, state: quoteData.state });
             }
         });
 
@@ -142,7 +143,7 @@ function renderQuotes() {
             const li = document.createElement('li');
             li.className = 'quote-item'; // Add CSS class for styling
             li.innerHTML = `
-                <span class="quote-text">${makeClickable(quote)}</span>
+                <span class="quote-text">${makeClickable(quote, quoteData.state)}</span>
                 <div class="quote-buttons" align="left">
                     <span onclick="copyQuote('${quote}')" class="copy-button">🗐 Copy</span>
                     <span onclick="deleteQuote('${quoteId}')" class="delete-button">🗑 Delete</span>
@@ -165,6 +166,32 @@ quoteForm.addEventListener('click', (e) => {
         const quoteObject = {
             name: name,
             quote: quoteText,
+            state: 'nocode',
+            timestamp: firebase.database.ServerValue.TIMESTAMP
+        };
+
+        newQuoteRef.set(quoteObject)
+            .then(() => {
+                quoteInput.value = ''; // Clear input
+
+            })
+            .catch((error) => {
+                console.error('Error adding quote: ', error);
+            });
+    }
+});
+
+quoteForm2.addEventListener('click', (e) => {
+    e.preventDefault();
+    const quoteText = quoteInput.value.trim();
+    const name = 'Anonymous'; // Set the name here or fetch from user input
+
+    if (quoteText !== '') {
+        const newQuoteRef = database.ref('slader').push();
+        const quoteObject = {
+            name: name,
+            quote: quoteText,
+            state: 'code',
             timestamp: firebase.database.ServerValue.TIMESTAMP
         };
 
@@ -180,11 +207,12 @@ quoteForm.addEventListener('click', (e) => {
 });
 
 // Function to make URLs clickable
-function makeClickable(input) {
+function makeClickable(input, state) {
+    if (state === "code") return `<pre>${input}</pre>`
     const pattern = /^(https?:\/\/[^\s]+)$/; // matches if entire input is a hyperlink
     return pattern.test(input)
         ? `<a href="${input}" target="_blank">${input.length > 70 ? input.slice(0, 30) + '...' + input.slice(-30) : input}</a>` // link case
-        : `<pre>${input}</pre>`; // non-link case
+        : input; // non-link case
 }
 
 // Function to copy quote to clipboard
