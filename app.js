@@ -153,7 +153,7 @@ function renderQuotes() {
         <span class="quote-text">${makeClickable(quote)}</span>
         <div class="quote-buttons" align="left">
             <span onclick="copyQuote('${parsed}')" class="copy-button">🩷 Copy</span>
-            <span onclick="deleteQuote('${quoteId}')" class="delete-button">🗑 Delete</span>
+            <span onclick="deleteQuote('${quoteId}')" class="delete-button">🗑</span>
         </div>
     `;
 
@@ -217,7 +217,7 @@ quoteForm2.addEventListener('click', (e) => {
 
 // Function to make URLs clickable
 function makeClickable(input, state) {
-    if (state === "code") return input.slice(0, 50);
+    if (state === "code") return input.slice(0, 30);
     const pattern = /^(https?:\/\/[^\s]+)$/; // matches if entire input is a hyperlink
     return pattern.test(input)
         ? `<a href="${input}" target="_blank">${input.length > 70 ? input.slice(0, 30) + '...' + input.slice(-30) : input}</a>` // link case
@@ -259,35 +259,32 @@ function getTimeString(time) {
     const timestamp = new Date(parseInt(time));
     const now = new Date();
     const diffMs = now.getTime() - timestamp.getTime();
-    const diffSec = Math.round(diffMs / 1000);
-    const diffMin = Math.round(diffSec / 60);
-    const diffHr = Math.round(diffMin / 60);
-    const diffDays = Math.round(diffHr / 24);
-
-    if (diffSec < 120) {
-        return 'Just now';
-    } else if (diffMin < 60) {
+    const diffSec = Math.floor(diffMs / 1000);
+    const diffMin = Math.floor(diffSec / 60);
+    const diffHr = Math.floor(diffMin / 60);
+    const diffDays = Math.floor(diffHr / 24);
+    
+    if (diffSec < 45) {
+        return 'a few seconds ago';
+    } else if (diffSec < 90) {
+        return 'a minute ago';
+    } else if (diffMin < 45) {
         return `${diffMin} minutes ago`;
-    } else if (diffHr < 24) {
-        return `${diffHr} ${diffHr === 1 ? 'hour' : 'hours'} ago`;
-    } else if (diffDays == 1) {
-        const hour = timestamp.getHours() > 12 ? (timestamp.getHours() - 12).toString().padStart(2, '0') : (timestamp.getHours() === 0 ? '12' : timestamp.getHours().toString().padStart(2, '0'));
-        const meridiem = timestamp.getHours() >= 12 ? 'PM' : 'AM';
-        const minute = timestamp.getMinutes().toString().padStart(2, '0');
-        return `ytd at ${hour}:${minute}  ${meridiem}`;
-    } else if (diffDays < 7) {
-        const dayOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'][timestamp.getDay()];
-        const hour = timestamp.getHours() > 12 ? (timestamp.getHours() - 12).toString().padStart(2, '0') : (timestamp.getHours() === 0 ? '12' : timestamp.getHours().toString().padStart(2, '0'));
-        const meridiem = timestamp.getHours() >= 12 ? 'PM' : 'AM';
-        const minute = timestamp.getMinutes().toString().padStart(2, '0');
-
-        return `${dayOfWeek} at ${hour}:${minute} ${meridiem}`;
+    } else if (diffMin < 90) {
+        return 'an hour ago';
+    } else if (diffHr < 22) {
+        return `${diffHr} hours ago`;
+    } else if (diffHr < 36) {
+        return 'a day ago';
+    } else if (diffDays < 26) {
+        return `${diffDays} days ago`;
+    } else if (diffDays < 45) {
+        return 'a month ago';
+    } else if (diffDays < 320) {
+        return `${Math.floor(diffDays / 30)} months ago`;
+    } else if (diffDays < 548) {
+        return 'a year ago';
     } else {
-        const month = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][timestamp.getMonth()];
-        const dayOfMonth = timestamp.getDate().toString().padStart(2, '0');
-        const hour = timestamp.getHours() > 12 ? (timestamp.getHours() - 12).toString().padStart(2, '0') : (timestamp.getHours() === 0 ? '12' : timestamp.getHours().toString().padStart(2, '0'));
-        const meridiem = timestamp.getHours() >= 12 ? 'PM' : 'AM';
-        const minute = timestamp.getMinutes().toString().padStart(2, '0');
-        return `${month} ${dayOfMonth} at ${hour}:${minute}  ${meridiem}`;
+        return `${Math.floor(diffDays / 365)} years ago`;
     }
 }
