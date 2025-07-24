@@ -140,17 +140,26 @@ function renderQuotes() {
             const quote = quoteData.quote;
             const quoteId = quoteData.quoteId;
 
+            const parsed = quote
+                .replace(/\\/g, '\\\\')   // escape backslashes
+                .replace(/'/g, '\\\'')    // escape single quotes
+                .replace(/\n/g, '\\n')    // escape newlines
+                .replace(/\r/g, '\\r');   // escape carriage returns
+
             const li = document.createElement('li');
-            li.className = 'quote-item'; // Add CSS class for styling
+            li.className = 'quote-item';
+
             li.innerHTML = `
-                <span class="quote-text">${makeClickable(quote, quoteData.state)}</span>
-                <div class="quote-buttons" align="left">
-                    <span onclick="copyQuote('${quote}')" class="copy-button">✅</span>
-                    <span onclick="deleteQuote('${quoteId}')" class="delete-button">🗑</span>
-                </div>
-            `;
+        <span class="quote-text">${makeClickable(quote)}</span>
+        <div class="quote-buttons" align="left">
+            <span onclick="copyQuote('${parsed}')" class="copy-button">🩷 Copy</span>
+            <span onclick="deleteQuote('${quoteId}')" class="delete-button">🗑 Delete</span>
+        </div>
+    `;
+
             quoteList.appendChild(li);
         });
+
     });
 }
 
@@ -208,7 +217,7 @@ quoteForm2.addEventListener('click', (e) => {
 
 // Function to make URLs clickable
 function makeClickable(input, state) {
-    if (state === "code") return input.slice(0,50);
+    if (state === "code") return input.slice(0, 50);
     const pattern = /^(https?:\/\/[^\s]+)$/; // matches if entire input is a hyperlink
     return pattern.test(input)
         ? `<a href="${input}" target="_blank">${input.length > 70 ? input.slice(0, 30) + '...' + input.slice(-30) : input}</a>` // link case
