@@ -145,8 +145,8 @@ function renderQuotes() {
             li.innerHTML = `
                 <span class="quote-text">${makeClickable(quote, quoteData.state)}</span>
                 <div class="quote-buttons" align="left">
-                    <span onclick="copyQuote('${quote}')" class="copy-button">🗐 Copy</span>
-                    <span onclick="deleteQuote('${quoteId}')" class="delete-button">🗑 Delete</span>
+                    <span onclick="copyQuote('${quote}')" class="copy-button">✅</span>
+                    <span onclick="deleteQuote('${quoteId}')" class="delete-button">🗑</span>
                 </div>
             `;
             quoteList.appendChild(li);
@@ -208,7 +208,7 @@ quoteForm2.addEventListener('click', (e) => {
 
 // Function to make URLs clickable
 function makeClickable(input, state) {
-    if (state === "code") return `<pre>${input}</pre>`
+    if (state === "code") return input.slice(0,50);
     const pattern = /^(https?:\/\/[^\s]+)$/; // matches if entire input is a hyperlink
     return pattern.test(input)
         ? `<a href="${input}" target="_blank">${input.length > 70 ? input.slice(0, 30) + '...' + input.slice(-30) : input}</a>` // link case
