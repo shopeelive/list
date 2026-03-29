@@ -3,87 +3,75 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=0.9">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Link List</title>
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-    <div align='center'>
-        <div class="tabs">
-            <button class="tab-button" onclick="openTab('upload')">Links</button>
-            <button class="tab-button" onclick="openTab('links')">Files</button>
-        </div>
-    </div>
+    <div class="shell">
+        <header class="mast">
+            <div class="mast-row">
+                <div class="mast-title">Link List</div>
+                <div class="mast-side">louie</div>
+            </div>
+        </header>
 
-    <div id="upload" class="tab-content" style="display:none;">
-        <div class="container">
+        <nav class="nav">
+            <button type="button" class="nav-tab active" data-tab="upload">Links</button>
+            <button type="button" class="nav-tab" data-tab="links">Files</button>
+        </nav>
 
-            <!-- File Upload Form -->
-            <div class="upload-form">
-                <input type="file" id="fileInput" class="file-input" multiple>
-                <button id="fileUploadForm" class="upload-button">Upload</button>
-                <div id="progressContainer">
-                    <div id="uploadProgress" style="margin-top: 10px;"></div>
+        <main class="main">
+            <section class="pane" data-pane="upload">
+                <div class="panel">
+                    <div class="panel-head">Post</div>
+
+                    <div class="composer">
+                        <textarea id="quoteInput" placeholder="Insert Link or Any Text..."></textarea>
+
+                        <div class="post-row">
+                            <button type="button" id="quoteForm2" class="btn">Code</button>
+                            <button type="button" id="quoteForm" class="btn btn-main">Post</button>
+                        </div>
+                    </div>
+
+                    <div class="panel-head panel-head-lite">Shortcuts</div>
+
+                    <div class="link-grid" id="listlink">
+                        <a href="https://shopee.ph/shopee-stream" target="_blank">DASH IMIXX</a>
+                        <a href="https://shopee.ph/andrei14388" target="_blank">LOUIE</a>
+                    </div>
+
+                    <div class="panel-head panel-head-lite">Feed</div>
+                    <ul id="quoteList" class="feed"></ul>
                 </div>
-            </div>
+            </section>
 
-            <!-- Display Uploaded Files -->
-            <div id="fileList" class="file-list"></div>
-        </div>
-    </div>
+            <section class="pane" data-pane="links" hidden>
+                <div class="panel">
+                    <div class="panel-head">Files</div>
 
-    <div id="links" class="tab-content">
-        <div class="container" id="listlink">
-            <p>
-                <!-- Form for Adding Quotes -->
-                <center>
-                    <a href="https://shopee.ph/shopee-stream">DASH IMIXX </a> | <a
-                        href="https://shopee.ph/andrei14388">LOUIE </a> | <a href="https://shopee.ph/7rxlmqtjq9">7RXLMQ
-                    </a>
-                    | <a href="https://shopee.ph/95wb7o1a5_">JO-ANN </a>
-                    <br>
-                    <br>
-                    <a href="https://shopee.ph/ao8j8ff8rx">AO8J8FF8
-                    </a> | <a href="https://shopee.ph/52tzu_posm">ANDREI </a> | <a
-                        href="https://shopee.ph/krisann14388">JEMCASTLE </a> | <a href="https://shopee.ph/pub3fbdw43">
-                        PROFILE</a>
-                </center>
-                <br>
-            <div style="display: flex; justify-content: space-between; align-items: center; margin: 10px;">
-                <textarea id="quoteInput" placeholder="Insert Link or Any Text..."
-                    style="width: 100%; margin-right: 10px;"></textarea>
-                <button id="quoteForm2">Code</button>&nbsp;
-                <button id="quoteForm">Post</button>
+                    <div class="upload-box">
+                        <input type="file" id="fileInput" class="file-input" multiple>
+                        <button type="button" id="fileUploadForm" class="btn btn-main">Upload</button>
+                    </div>
 
-            </div>
+                    <div id="progressContainer" class="prog-wrap">
+                        <div id="uploadProgress" class="prog-text"></div>
+                    </div>
 
-
-            <!-- Display Quotes -->
-            <ul id="quoteList" style="width: 100%"></ul>
-        </div>
+                    <div id="fileList" class="file-list"></div>
+                </div>
+            </section>
+        </main>
     </div>
 
     <script src="https://www.gstatic.com/firebasejs/8.3.3/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.3.3/firebase-database.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.30.1/moment.min.js"></script>
     <script src="app.js"></script>
-
-    <script>
-        function openTab(tabName) {
-            var i;
-            var tabcontent = document.getElementsByClassName("tab-content");
-            for (i = 0; i < tabcontent.length; i++) {
-                tabcontent[i].style.display = "block";
-            }
-            document.getElementById(tabName).style.display = "none";
-        }
-
-        // Open the default tab
-        document.addEventListener("DOMContentLoaded", function () {
-            openTab('upload');
-        });
-    </script>
 </body>
 
 </html>
