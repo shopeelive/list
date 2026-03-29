@@ -1,5 +1,5 @@
 // Firebase configuration
-const firebaseConfig = {
+  const firebaseConfig = {
     apiKey: "AIzaSyD7156apCcrJnRX9cP8KSazMbILNJgKEt0",
     authDomain: "lois-files.firebaseapp.com",
     databaseURL: "https://lois-files-default-rtdb.asia-southeast1.firebasedatabase.app",
@@ -7,7 +7,7 @@ const firebaseConfig = {
     storageBucket: "lois-files.appspot.com",
     messagingSenderId: "294529638144",
     appId: "1:294529638144:web:f2c2c504d1ed9a12641de5"
-};
+  };
 
 
 // Initialize Firebase
@@ -123,7 +123,7 @@ fileUploadForm.addEventListener('click', (e) => {
 function renderQuotes() {
 
 
-    database.ref('slader/slader/slader/slader').limitToLast(50).on('value', (snapshot) => {
+    database.ref('slader/slader').limitToLast(50).on('value', (snapshot) => {
         quoteList.innerHTML = ''; // Clear existing list
         let quotes = []; // Collect all quotes first
 
@@ -264,7 +264,7 @@ function getTimeString(time) {
     const diffMin = Math.floor(diffSec / 60);
     const diffHr = Math.floor(diffMin / 60);
     const diffDays = Math.floor(diffHr / 24);
-
+    
     if (diffSec < 45) {
         return 'a few seconds ago';
     } else if (diffSec < 90) {
