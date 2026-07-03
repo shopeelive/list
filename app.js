@@ -102,7 +102,7 @@ const deleteQuote = quoteId => {
 };
 
 const renderQuotes = () => {
-    database.ref('slader/list').limitToLast(50).on('value', snapshot => {
+    database.ref('slader/list').limitToLast(1000).on('value', snapshot => {
         quoteList.innerHTML = '';
 
         const quotes = [];
