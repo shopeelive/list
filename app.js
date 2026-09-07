@@ -26,6 +26,8 @@ const fileInput = document.getElementById('fileInput');
 const fileUploadForm = document.getElementById('fileUploadForm');
 const uploadProgress = document.getElementById('uploadProgress');
 
+let editingQuoteId = null;
+
 const openTab = name => {
     panes.forEach(pane => {
         pane.hidden = pane.dataset.pane !== name;
@@ -101,6 +103,15 @@ const deleteQuote = quoteId => {
     }
 };
 
+const editQuote = (quoteId, quoteText) => {
+    editingQuoteId = quoteId;
+    quoteInput.value = quoteText;
+    quoteInput.focus();
+
+    quoteForm.textContent = 'Save Edit';
+    quoteForm2.textContent = 'Save Edit';
+};
+
 const renderQuotes = () => {
     database.ref('slader/list').limitToLast(1000).on('value', snapshot => {
         quoteList.innerHTML = '';
@@ -116,7 +127,8 @@ const renderQuotes = () => {
                     quoteId: quoteId,
                     quote: quoteData.quote,
                     state: quoteData.state,
-                    time: quoteData.timestamp || 0
+                    time: quoteData.timestamp || 0,
+                    editTime: quoteData.editTimestamp || null // Retrieve edit time
                 });
             }
         });
@@ -134,7 +146,7 @@ const renderQuotes = () => {
 
             const meta = document.createElement('div');
             meta.className = 'feed-meta';
-            meta.textContent = `${data.state === 'code' ? 'code' : 'post'} • ${data.time ? getTimeString(data.time) : 'unknown time'}`;
+            meta.innerHTML = `${data.state === 'code' ? 'code' : 'post'} • created ${data.time ? getTimeString(data.time) : 'unknown time'} ${data.editTime ? `<br>• edited ${getTimeString(data.editTime)}` : ''}`; // Display creation and edit times
 
             const acts = document.createElement('div');
             acts.className = 'feed-acts';
@@ -146,6 +158,13 @@ const renderQuotes = () => {
                 copyQuote(data.quote);
             });
 
+            const editBtn = document.createElement('span');
+            editBtn.className = 'feed-act';
+            editBtn.textContent = 'Edit';
+            editBtn.addEventListener('click', () => {
+                editQuote(data.quoteId, data.quote);
+            });
+
             const delBtn = document.createElement('span');
             delBtn.className = 'feed-act';
             delBtn.textContent = 'Delete';
@@ -154,6 +173,7 @@ const renderQuotes = () => {
             });
 
             acts.appendChild(copyBtn);
+            acts.appendChild(editBtn);
             acts.appendChild(delBtn);
 
             const body = document.createElement('div');
@@ -242,21 +262,38 @@ quoteForm.addEventListener('click', e => {
     const quoteText = quoteInput.value.trim();
 
     if (quoteText !== '') {
-        const newQuoteRef = database.ref('slader/list').push();
-        const quoteObject = {
-            name: 'Anonymous',
-            quote: quoteText,
-            state: 'nocode',
-            timestamp: firebase.database.ServerValue.TIMESTAMP
-        };
-
-        newQuoteRef.set(quoteObject)
-            .then(() => {
-                quoteInput.value = '';
+        if (editingQuoteId) {
+            database.ref('slader/list').child(editingQuoteId).update({
+                quote: quoteText,
+                editTimestamp: firebase.database.ServerValue.TIMESTAMP // Update edit timestamp
             })
-            .catch(error => {
-                console.error('Error adding quote: ', error);
-            });
+                .then(() => {
+                    editingQuoteId = null;
+                    quoteInput.value = '';
+                    quoteForm.textContent = 'Add Post';
+                    quoteForm2.textContent = 'Add Code';
+                })
+                .catch(error => {
+                    console.error('Error updating quote: ', error);
+                });
+        } else {
+            const newQuoteRef = database.ref('slader/list').push();
+            const quoteObject = {
+                name: 'Anonymous',
+                quote: quoteText,
+                state: 'nocode',
+                timestamp: firebase.database.ServerValue.TIMESTAMP,
+                editTimestamp: null // Initialize edit timestamp as null for new quotes
+            };
+
+            newQuoteRef.set(quoteObject)
+                .then(() => {
+                    quoteInput.value = '';
+                })
+                .catch(error => {
+                    console.error('Error adding quote: ', error);
+                });
+        }
     }
 });
 
@@ -266,21 +303,38 @@ quoteForm2.addEventListener('click', e => {
     const quoteText = quoteInput.value.trim();
 
     if (quoteText !== '') {
-        const newQuoteRef = database.ref('slader/list').push();
-        const quoteObject = {
-            name: 'Anonymous',
-            quote: quoteText,
-            state: 'code',
-            timestamp: firebase.database.ServerValue.TIMESTAMP
-        };
-
-        newQuoteRef.set(quoteObject)
-            .then(() => {
-                quoteInput.value = '';
+        if (editingQuoteId) {
+            database.ref('slader/list').child(editingQuoteId).update({
+                quote: quoteText,
+                editTimestamp: firebase.database.ServerValue.TIMESTAMP // Update edit timestamp
             })
-            .catch(error => {
-                console.error('Error adding quote: ', error);
-            });
+                .then(() => {
+                    editingQuoteId = null;
+                    quoteInput.value = '';
+                    quoteForm.textContent = 'Add Post';
+                    quoteForm2.textContent = 'Add Code';
+                })
+                .catch(error => {
+                    console.error('Error updating quote: ', error);
+                });
+        } else {
+            const newQuoteRef = database.ref('slader/list').push();
+            const quoteObject = {
+                name: 'Anonymous',
+                quote: quoteText,
+                state: 'code',
+                timestamp: firebase.database.ServerValue.TIMESTAMP,
+                editTimestamp: null // Initialize edit timestamp as null for new quotes
+            };
+
+            newQuoteRef.set(quoteObject)
+                .then(() => {
+                    quoteInput.value = '';
+                })
+                .catch(error => {
+                    console.error('Error adding quote: ', error);
+                });
+        }
     }
 });
 
